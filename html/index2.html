@@ -16,10 +16,21 @@ require_once("../php/conexion.php");
  $registros= $conexion->query("SELECT * FROM aprendices")->fetchAll(PDO::FETCH_OBJ);
 
  if(isset($_POST['insertar'])){
+ 
+
      
  $documento=$_POST['documento'];
  $nombres=$_POST['nombres'];
  $apellidos=$_POST['apellidos'];
+
+ $resultado=$conexion->query("SELECT COUNT(*) FROM aprendices WHERE documento=".$documento);
+
+
+  if($resultado->fetchColumn()>0){
+
+     $msj="Ya existe este Usuario!";
+  }else{
+   $msj="";
 
  $sql="INSERT INTO aprendices (documento,nombres,apellidos) VALUES(:doc,:nom,:ape)";
 
@@ -29,7 +40,7 @@ require_once("../php/conexion.php");
 
 header("Location:http://ninoadsi.comlu.com/crud/html/index2.html");
 
-
+}
 
 
  }
@@ -45,7 +56,7 @@ header("Location:http://ninoadsi.comlu.com/crud/html/index2.html");
       <div class="container">
         
           <h1 class="col-md-5 text-center">APRENDICES</h1>
-
+           <h2><?php echo $msj; ?></h2>
       </div>
 
 
