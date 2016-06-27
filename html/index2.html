@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="shortcut icon" href="img/favicon.png">
+    <meta charset="UTF-8">
+	<title>Crud Aprendices</title>
+	 <meta name="viewport" content="width=device-width, user-scaleble=no, initial-scale=1.0, maximun-scale=1.0, minimun-scale=1.0">
+
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+        <link rel="stylesheet" type="text/css" href="estilos.css">
+</head>
+<body>
+<?php 
+require_once("../php/conexion.php");
+
+ $registros= $conexion->query("SELECT * FROM aprendices")->fetchAll(PDO::FETCH_OBJ);
+
+ if(isset($_POST['insertar'])){
+     
+ $documento=$_POST['documento'];
+ $nombres=$_POST['nombres'];
+ $apellidos=$_POST['apellidos'];
+
+ $sql="INSERT INTO aprendices (documento,nombres,apellidos) VALUES(:doc,:nom,:ape)";
+
+ $resultado=$conexion->prepare($sql);
+
+ $resultado->execute(array(":doc"=>$documento,":nom"=>$nombres,":ape"=>$apellidos));
+
+header("Location:http://ninoadsi.comlu.com/crud/html/index2.html");
+
+
+
+
+ }
+
+
+?>
+
+
+
+
+     <header>
+      
+      <div class="container">
+        
+          <h1 class="col-md-5 text-center">APRENDICES</h1>
+
+      </div>
+
+
+    </header>
+      <div class="container">
+       <div class="table-responsive">
+       <form action="<?php echo $_SERVER['PHP_SELF'];?>" name="form2" method="post">
+        <table class="table  table-bordered table-hover">
+        	<tr class="info">  
+        		<th>DOCUMENTO</th>
+        		<th>NOMBRES</th>
+        		<th>APELLIDOS</th>
+         
+        	</tr>
+          <?php
+        foreach($registros as $aprendiz):
+         ?>
+          <tr>
+            <th><?php echo $aprendiz->documento ?></th>
+            <th><?php echo $aprendiz->nombres ?></th>
+            <th><?php echo $aprendiz->apellidos ?></th>
+            <th><a href="../php/borrar.php?documento=<?php echo $aprendiz->documento ?>"><button type="button" class="btn btn-danger">Borrar</button></a>&nbsp&nbsp<a href="../php/actualizar.php?documento=<?php echo $aprendiz->documento ?>& nombres=<?php echo $aprendiz->nombres ?>& apellidos=<?php echo $aprendiz->apellidos ?>"><button type="button" class="btn btn-success">Actualizar</button></a></th>    
+          </tr>
+     <?php
+
+     endforeach;
+
+     ?>
+
+        	<tr>
+        		
+        		<th><input type="umber" name= "documento" id="documento" value=""></th>
+        		<th><input type="text" id="nombre" value="" name="nombres"></th>
+            <th><input type="text" id="apellido" value="" name="apellidos"></th>    
+            <th><button type="submit" name="insertar" class="btn btn-primary">Insertar</button></th> 
+             
+        	</tr>
+      
+         </table>
+         </form>
+      </div>
+     
+
+       <script src="http://code.jquery.com/jquery-lastest.js"></script>
+       <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+</body>
+</html>
