@@ -15,15 +15,21 @@ require_once("../php/conexion.php");
 
  $registros= $conexion->query("SELECT * FROM aprendices")->fetchAll(PDO::FETCH_OBJ);
 
- if(isset($_POST['insertar'])){
- 
 
-     
+
+ if(isset($_POST['insertar'])){   
+ if(empty($_POST['documento']) Or empty($_POST['nombres']) Or empty($_POST['apellidos']) ){
+
+
+   $msj="Llene todos los campos!";
+
+ }else{ 
  $documento=$_POST['documento'];
  $nombres=$_POST['nombres'];
  $apellidos=$_POST['apellidos'];
 
- $resultado=$conexion->query("SELECT COUNT(*) FROM aprendices WHERE documento=".$documento);
+ $resultado=$conexion->query("SELECT * FROM aprendices WHERE documento=".$documento);
+
 
 
   if($resultado->fetchColumn()>0){
@@ -38,14 +44,12 @@ require_once("../php/conexion.php");
 
  $resultado->execute(array(":doc"=>$documento,":nom"=>$nombres,":ape"=>$apellidos));
 
+
 header("Location:http://ninoadsi.comlu.com/crud/html/index2.html");
-
 }
-
-
  }
 
-
+}
 ?>
 
 
